@@ -1,0 +1,110 @@
+# Copyright 2022-2023 Universität Tübingen, DKFZ and EMBL
+# for the German Human Genome-Phenome Archive (GHGA)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: PyPI Publish
+description: Tasks that are executed in GHGA PyPI publish pipeline 
+
+strategy:
+  matrix:
+    python-version: ["3.9", "3.10", "3.11"]
+
+inputs:
+  tag:
+    description: "The tag used to publish to the registry."
+    required: true
+  test_pypi_api_token:
+    description: "Token required to publish the package to test pypi"
+    required: true
+  pypi_api_token:
+    description: "Token required to publish the package to test pypi"
+    required: true
+
+runs:
+    using: composite
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: {{ matrix.python-version }}
+      
+      - name: Verify Package Version vs Tag Version
+        shell: bash
+        with:
+          python-version: "3.11"
+        run: |
+        if [ -f "setup.py" ]
+        then
+          PKG_VER="$(python setup.py --version)"
+        elif [ -f "pyproject.toml" ]
+        then
+          PKG_VER=$(python3.11 -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
+        else
+          echo "Neither setup.py nor pyproject.toml were found." >&2; exit 1
+        fi
+
+        TAG_VER=${{ inputs.package_version }}
+        [[ -z "$TAG_VER" ]] && TAG_VER=${{ inputs.tag }}
+
+        echo "Package version is $PKG_VER" >&2
+        echo "Tag version is $TAG_VER" >&2
+        if [ "$PKG_VER" != "$TAG_VER" ]; then
+          echo "Package version and tag name mismatch." >&2
+          exit 1
+        fi
+      - name: Install pypa/build
+        run: >-
+          python -m
+          pip install
+          build
+          --user
+
+      - name: Build a binary wheel and a source tarball
+        run: >-
+          python -m
+          build
+          --sdist
+          --wheel
+          --outdir dist/
+          .
+
+      - name: Install the newly build package with all extras
+        run: |
+          TAR_PATH="$( realpath ./dist/*.tar.gz)"
+          python -m \
+            pip install \
+            "${TAR_PATH}[all]"
+
+      - name: Install testing requirements
+        run: >-
+          python -m
+          pip install
+          -r ./lock/requirements-dev.txt
+
+      - name: Run pytest on freshly installed package
+        run: |
+          pytest .
+
+      - name: Publish distribution package to PyPI (test)
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ inputs.test_pypi_api_token }}
+          repository-url: https://test.pypi.org/legacy/
+
+      - name: Publish distribution package to PyPI (production)
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ inputs.pypi_api_token }}
