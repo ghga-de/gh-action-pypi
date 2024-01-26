@@ -16,9 +16,7 @@
 name: PyPI Publish
 description: Tasks that are executed in GHGA PyPI publish pipeline 
 
-strategy:
-  matrix:
-    python-version: ["3.9", "3.10", "3.11"]
+
 
 inputs:
   tag:
@@ -30,6 +28,9 @@ inputs:
   pypi_api_token:
     description: "Token required to publish the package to test pypi"
     required: true
+  python_version:
+    description: "Python versions to setup"
+    required: true
 
 runs:
     using: composite
@@ -39,7 +40,7 @@ runs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: {{ matrix.python-version }}
+          python-version: {{ input.python_version }}
       
       - name: Verify Package Version vs Tag Version
         shell: bash
