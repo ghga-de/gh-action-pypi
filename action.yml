@@ -31,9 +31,7 @@ inputs:
   python_version:
     description: "Python versions to setup"
     required: true
-  working_directory:
-    description: "Directory which contains Dockerfile and project configuration files"
-    default: "."
+
 
 runs:
     using: composite
@@ -45,7 +43,6 @@ runs:
 
       - name: Verify Package Version vs Tag Version
         shell: bash
-        working-directory: ${{ inputs.working_directory }}
         run: |
           echo $pwd
           TAG_VER=${{ inputs.package_version }}
