@@ -41,7 +41,7 @@ runs:
       - name: Verify Package Version vs Tag Version
         shell: bash
         run: |
-          TAG_VER=${{ inputs.package_version }}
+          TAG_VER=${{ inputs.tag }}
           echo "Tag version is $TAG_VER" >&2
 
           PKG_VER=$(python3.11 -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
