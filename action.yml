@@ -28,9 +28,6 @@ inputs:
   pypi_api_token:
     description: "Token required to publish the package to test pypi"
     required: true
-  python_version:
-    description: "Python versions to setup"
-    required: true
 
 
 runs:
