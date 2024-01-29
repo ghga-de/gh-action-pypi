@@ -47,6 +47,7 @@ runs:
         shell: bash
         working-directory: ${{ inputs.working_directory }}
         run: |
+          echo $pwd
           TAG_VER=${{ inputs.package_version }}
           echo "Tag version is $TAG_VER" >&2
 
