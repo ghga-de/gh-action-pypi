@@ -13,6 +13,7 @@ jobs:
     steps:
       - name: Test locally
         uses: ./
+        working_directory: ./test
         with:
           python_version: ${{ matrix.python-version }}
           tag: "0.0.0"

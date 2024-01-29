@@ -31,6 +31,9 @@ inputs:
   python_version:
     description: "Python versions to setup"
     required: true
+  working_directory:
+    description: "Directory which contains Dockerfile and project configuration files"
+    default: "."
 
 runs:
     using: composite
@@ -46,6 +49,7 @@ runs:
         shell: bash
         with:
           python-version: "3.11"
+        working-directory: ${{ inputs.working_directory }}
         run: |
         if [ -f "setup.py" ]
         then
