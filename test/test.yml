@@ -1,7 +1,7 @@
 name: PyPI Publish
 
 on:
-  push:
+  release:
 
 jobs:
   test-publish:
