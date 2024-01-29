@@ -43,7 +43,7 @@ runs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: {{ input.python_version }}
+          python-version: ${{ input.python_version }}
 
       - name: Verify Package Version vs Tag Version
         shell: bash
