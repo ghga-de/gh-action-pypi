@@ -1,21 +1,22 @@
 name: PyPI Publish
 
 on:
-  release:
+  push:
 
 jobs:
   test-publish:
     name: Testing actions
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.9", "3.10", "3.11"]
+    # strategy:
+    #   matrix:
+    #     python-version: ["3.9", "3.10", "3.11"]
     steps:
       - name: Test locally
-        uses: ./
-        working_directory: ./test
+        working-directory: ./test
+        uses: ghga-de/gh-action-pypi@332379fb7492bd5494c63af8768e0cff640aa372
         with:
-          python_version: ${{ matrix.python-version }}
+          # python_version: ${{ matrix.python-version }}
           tag: "0.0.0"
-          test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
+        #   # test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        #   # pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
+

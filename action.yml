@@ -44,7 +44,6 @@ runs:
       - name: Verify Package Version vs Tag Version
         shell: bash
         run: |
-          echo $pwd
           TAG_VER=${{ inputs.package_version }}
           echo "Tag version is $TAG_VER" >&2
 
