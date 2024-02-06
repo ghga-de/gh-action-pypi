@@ -28,7 +28,9 @@ inputs:
   pypi_api_token:
     description: "Token required to publish the package to test pypi"
     required: true
-
+  working_directory:
+    description: "Directory which contains Dockerfile and project configuration files. It is used for local testing purposes."
+    default: "."
 
 runs:
     using: composite
@@ -42,6 +44,7 @@ runs:
 
       - name: Verify Package Version vs Tag Version
         shell: bash
+        working-directory: ${{ inputs.working_directory }}
         run: |
 
 
@@ -75,6 +78,7 @@ runs:
 
       - name: Build a binary wheel and a source tarball
         shell: bash
+        working-directory: ${{ inputs.working_directory }}
         run: >-
           python -m
           build
@@ -85,6 +89,7 @@ runs:
 
       - name: Install the newly build package with all extras
         shell: bash
+        working-directory: ${{ inputs.working_directory }}
         run: |
           TAR_PATH="$( realpath ./dist/*.tar.gz)"
           python -m \
@@ -93,6 +98,7 @@ runs:
 
       - name: Install testing requirements
         shell: bash
+        working-directory: ${{ inputs.working_directory }}
         run: >-
           python -m
           pip install
@@ -105,11 +111,14 @@ runs:
 
       - name: Publish distribution package to PyPI (test)
         uses: pypa/gh-action-pypi-publish@release/v1
+        if: ${{ !env.ACT }}
         with:
           password: ${{ inputs.test_pypi_api_token }}
           repository-url: https://test.pypi.org/legacy/
 
+
       - name: Publish distribution package to PyPI (production)
         uses: pypa/gh-action-pypi-publish@release/v1
+        if: ${{ !env.ACT }}
         with:
           password: ${{ inputs.pypi_api_token }}

@@ -1,2 +1,4 @@
 [project]
+name= "test_publish"
 version = "0.0.0"
+readme = "README.md"
