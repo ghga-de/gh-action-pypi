@@ -33,6 +33,8 @@ inputs:
 runs:
     using: composite
     steps:
+      - uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -41,12 +43,27 @@ runs:
       - name: Verify Package Version vs Tag Version
         shell: bash
         run: |
-          TAG_VER=${{ inputs.tag }}
-          echo "Tag version is $TAG_VER" >&2
 
-          PKG_VER=$(python3.11 -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
+
+          if [ -f "setup.py" ]
+          then
+            PKG_VER="$(python setup.py --version)"
+          elif [ -f "pyproject.toml" ]
+          then
+            PKG_VER=$(python3.11 -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
+          else
+            echo "Neither setup.py nor pyproject.toml were found." >&2; exit 1
+          fi
+
+          TAG_VER=${{ inputs.tag }}
+          [[ -z "$TAG_VER" ]] && TAG_VER=${{ inputs.tag }}
+
           echo "Package version is $PKG_VER" >&2
-          
+          echo "Tag version is $TAG_VER" >&2
+          if [ "$PKG_VER" != "$TAG_VER" ]; then
+            echo "Package version and tag name mismatch." >&2
+            exit 1
+          fi
 
       # - name: Install pypa/build
       #   run: >-
