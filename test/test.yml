@@ -4,17 +4,32 @@ on:
   release:
 
 jobs:
-  test_publish:
-    name: Testing actions
+  test_package:
+    name: Test Package
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Test locally
-        uses: ./
+
+      - name: Create Package
+        uses: ./package
         with:
           working_directory: ./test
           tag: "0.0.0"
+          python_version: ${{ matrix.python-version }}
+
+  test_publish:
+    name: Test Publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Publish Package
+        uses: ./publish
+        with:
           test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
           pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
-
