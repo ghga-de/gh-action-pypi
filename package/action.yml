@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: PyPI Package
+name: Build Python Package
 description: Tasks that are executed in GHGA PyPI packaging pipeline
 
 inputs:
