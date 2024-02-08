@@ -21,7 +21,7 @@ inputs:
     description: "The tag used to publish to the registry."
     required: true
   working_directory:
-    description: "Directory which contains Dockerfile and project configuration files. It is used for local testing purposes."
+    description: "Directory which contains project configuration files."
     default: "."
   python_version:
     description: "Supported python versions"
