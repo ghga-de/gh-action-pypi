@@ -1,0 +1,44 @@
+name: Build Python Package
+description: Tasks that are executed in GHGA PyPI packaging pipeline
+
+inputs:
+  tag:
+    description: "The tag used to publish to the registry."
+    required: true
+  working_directory:
+    description: "Directory which contains project configuration files."
+    default: "."
+  python_version:
+    description: "Supported python versions"
+
+
+runs:
+    using: composite
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify tag
+        uses: ./verify_tag
+        with:
+          working_directory: ${{ inputs.working_directory }}
+          python_version: ${{ inputs.python_version }}
+          tag: ${{ inputs.tag }}
+      
+      - name: Build package
+        uses: ./build_package
+        with:
+          working_directory: ${{ inputs.working_directory }}
+          python_version: ${{ inputs.python_version }}
+      
+      - name: Test package
+        uses: ./test_package
+        with:
+          working_directory: ${{ inputs.working_directory }}
+          python_version: ${{ inputs.python_version }}
+
+      - name: Publish package
+        uses: ./pypi_publish
+        with:
+          test_pypi_api_token: ${{ inputs.test_pypi_api_token }}
+          pypi_api_token: ${{ inputs.pypi_api_token }}

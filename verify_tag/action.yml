@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Build Python Package
-description: Tasks that are executed in GHGA PyPI packaging pipeline
+name: Verify Python Package Tag
+description: Tasks that are executed in GHGA to verify Python package tag
 
 inputs:
   tag:
@@ -24,7 +24,7 @@ inputs:
     description: "Directory which contains project configuration files."
     default: "."
   python_version:
-    description: "Supported python versions"
+    description: "Supported Python versions"
 
 
 runs:
@@ -64,44 +64,3 @@ runs:
             echo "Package version and tag name mismatch." >&2
             exit 1
           fi
-
-      - name: Install pypa/build
-        shell: bash
-        run: >-
-          python -m
-          pip install
-          build
-          --user
-
-      - name: Build a binary wheel and a source tarball
-        shell: bash
-        working-directory: ${{ inputs.working_directory }}
-        run: >-
-          python -m
-          build
-          --sdist
-          --wheel
-          --outdir dist/
-          .
-
-      - name: Install the newly build package with all extras
-        shell: bash
-        working-directory: ${{ inputs.working_directory }}
-        run: |
-          TAR_PATH="$( realpath ./dist/*.tar.gz)"
-          python -m \
-            pip install \
-            "${TAR_PATH}[all]"
-
-      - name: Install testing requirements
-        shell: bash
-        working-directory: ${{ inputs.working_directory }}
-        run: >-
-          python -m
-          pip install
-          -r ./lock/requirements-dev.txt
-
-      - name: Run pytest on freshly installed package
-        shell: bash
-        run: |
-          pytest .
