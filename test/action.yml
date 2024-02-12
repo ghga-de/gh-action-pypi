@@ -1,0 +1,33 @@
+name: Test build, pytest and publish action
+
+on:
+  release:
+
+jobs:
+  test_action:
+    name: Test Action
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      
+      # For future
+      # - name: Generate Random Version
+      #   working_directory: test/dummy-package
+      #   id: generate_version
+      #   run: |
+      #     echo "RANDOM_VERSION=$(shuf -i 0-999 -n 3 | tr '\n' '.')" >> $GITHUB_ENV
+      #     # Use sed to replace the version
+      #     ls -lca
+      #     sed -i "s/version = \"0\.0\.0\"/version = \"$RANDOM_VERSION\"/" ./test/dummy-package/pyproject.toml
+
+      - name: Test all sub-actions with test package located at ./test-package
+        uses: ./
+        with:
+          working_directory: test/dummy-package
+          tag: 0.0.3
+          python_version: ${{ matrix.python-version }}
+          test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}

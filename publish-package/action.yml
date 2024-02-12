@@ -18,11 +18,14 @@ description: Tasks that are executed in GHGA PyPI publish pipeline
 
 inputs:
   test_pypi_api_token:
-    description: "Token required to publish the package to test pypi"
+    description: "Token required to publish the package to test pypi."
     required: true
   pypi_api_token:
-    description: "Token required to publish the package to test pypi"
+    description: "Token required to publish the package to test pypi."
     required: true
+  working_directory:
+    description: "Path to the package which should be published."
+    default: .
 
 runs:
     using: composite
@@ -30,10 +33,10 @@ runs:
     steps:
       - name: Publish distribution package to PyPI (test)
         uses: pypa/gh-action-pypi-publish@release/v1
-        if: ${{ !env.ACT }}
         with:
           password: ${{ inputs.test_pypi_api_token }}
           repository-url: https://test.pypi.org/legacy/
+          packages-dir: ${{ inputs.working_directory }}/dist/
 
       - name: Publish distribution package to PyPI (production)
         uses: pypa/gh-action-pypi-publish@release/v1

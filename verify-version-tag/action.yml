@@ -23,28 +23,17 @@ inputs:
   working_directory:
     description: "Directory which contains project configuration files."
     default: "."
-  python_version:
-    description: "Supported Python versions"
-
 
 runs:
     using: composite
 
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ inputs.python_version }}
-
-      - name: Display Python version
-        shell: bash
-        run: |
-          echo PYTHON_VER=$(python --version) >> $GITHUB_ENV
-
-      - if: contains(env.PYTHON_VER, '3.11')
-        name: Verify package version vs tag version
+          python-version: "3.11"
+      - name: Verify package version vs tag version
         shell: bash
         working-directory: ${{ inputs.working_directory }}
         run: |
