@@ -73,6 +73,7 @@ runs:
           -r ./lock/requirements-dev.txt
 
       - name: Run pytest on freshly installed package
+        working-directory: ${{ inputs.working_directory }}
         shell: bash
         run: |
           pytest .
