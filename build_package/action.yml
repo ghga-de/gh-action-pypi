@@ -18,10 +18,10 @@ description: Tasks that are executed in GHGA to build a Python package
 
 inputs:
   working_directory:
-    description: "Directory which contains project configuration files."
+    description: "Directory which contains project configuration files"
     default: "."
   python_version:
-    description: "Supported python versions"
+    description: "Python versions used to build and test the package"
 
 
 runs:
