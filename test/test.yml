@@ -18,7 +18,8 @@ jobs:
         uses: ./
         with:
           working_directory: ./test
-          tag: "0.0.0"
+          tag: "0.1.0"
           python_version: ${{ matrix.python-version }}
           test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
           pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
+          package_dir: ./test/dist/

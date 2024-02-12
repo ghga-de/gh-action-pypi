@@ -1,4 +1,4 @@
 [project]
-name= "test-publish-ghga-gh-action"
-version = "0.0.0"
+name= "testing-publish-ghga-gh-action"
+version = "0.1.0"
 readme = "README.md"

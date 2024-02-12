@@ -23,6 +23,10 @@ inputs:
   pypi_api_token:
     description: "Token required to publish the package to test pypi"
     required: true
+  package_dir: 
+    description: "Custom target package dists directory"
+    default: "dist/"
+  
 
 runs:
     using: composite
@@ -30,13 +34,15 @@ runs:
     steps:
       - name: Publish distribution package to PyPI (test)
         uses: pypa/gh-action-pypi-publish@release/v1
-        if: ${{ !env.ACT }}
+        # if: ${{ !env.ACT }}
         with:
           password: ${{ inputs.test_pypi_api_token }}
           repository-url: https://test.pypi.org/legacy/
+          packages-dir: ${{ inputs.package_dir }}
 
       - name: Publish distribution package to PyPI (production)
         uses: pypa/gh-action-pypi-publish@release/v1
-        if: ${{ !env.ACT }}
+        # if: ${{ !env.ACT }}
         with:
           password: ${{ inputs.pypi_api_token }}
+          packages-dir: ${{ inputs.package_dir }}
