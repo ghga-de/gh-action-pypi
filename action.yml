@@ -1,4 +1,5 @@
-name: Build Python Package
+name: Build, Test and Publish Python Package
+
 description: Tasks that are executed in GHGA PyPI packaging pipeline
 
 inputs:
@@ -6,49 +7,49 @@ inputs:
     description: "The tag used to publish to the registry."
     required: true
   working_directory:
-    description: "Directory which contains project configuration files."
+    description: "Directory which Python project."
     default: "."
   python_version:
-    description: "Supported python versions"
+    description: "Python version used to build, test and publish package."
   test_pypi_api_token:
-    description: "Token required to publish the package to test pypi"
+    description: "Token used for authentication to pypi test."
     required: true
   pypi_api_token:
-    description: "Token required to publish the package to test pypi"
-    required: true
+    description: "Token used for authentication to pypi."
+    required: true  
   package_dir: 
     description: "Custom target package dists directory"
     default: "dist/"
 
 
 runs:
-    using: composite
+  using: composite
 
-    steps:
-      - uses: actions/checkout@v4
+  steps:
+    - uses: actions/checkout@v4
 
-      - name: Verify tag
-        uses: ./verify_tag
-        with:
-          working_directory: ${{ inputs.working_directory }}
-          python_version: ${{ inputs.python_version }}
-          tag: ${{ inputs.tag }}
-      
-      - name: Build package
-        uses: ./build_package
-        with:
-          working_directory: ${{ inputs.working_directory }}
-          python_version: ${{ inputs.python_version }}
-      
-      - name: Test package
-        uses: ./test_package
-        with:
-          working_directory: ${{ inputs.working_directory }}
-          python_version: ${{ inputs.python_version }}
+    - name: Verify tag
+      uses: ./verify-version-tag
+      with:
+        working_directory: ${{ inputs.working_directory }}
+        tag: ${{ inputs.tag }}
 
-      - name: Publish package
-        uses: ./pypi_publish
-        with:
-          test_pypi_api_token: ${{ inputs.test_pypi_api_token }}
-          pypi_api_token: ${{ inputs.pypi_api_token }}
-          package_dir: ${{ inputs.package_dir }}
+    - name: Build package
+      uses: ./build-python-package
+      with:
+        working_directory: ${{ inputs.working_directory }}
+        python_version: ${{ inputs.python_version }}
+
+    - name: Test package
+      uses: ./test-package
+      with:
+        working_directory: ${{ inputs.working_directory }}
+        python_version: ${{ inputs.python_version }}
+
+    - name: Publish package
+      uses: ./publish-package
+      with:
+        test_pypi_api_token: ${{ inputs.test_pypi_api_token }}
+        pypi_api_token: ${{ inputs.pypi_api_token }}
+        working_directory: ${{ inputs.working_directory }}
+        package_dir: ${{ inputs.package_dir }}

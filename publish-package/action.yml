@@ -34,7 +34,7 @@ runs:
     steps:
       - name: Publish distribution package to PyPI (test)
         uses: pypa/gh-action-pypi-publish@release/v1
-        # if: ${{ !env.ACT }}
+        if: ${{ !env.ACT }}
         with:
           password: ${{ inputs.test_pypi_api_token }}
           repository-url: https://test.pypi.org/legacy/
@@ -42,7 +42,7 @@ runs:
 
       - name: Publish distribution package to PyPI (production)
         uses: pypa/gh-action-pypi-publish@release/v1
-        # if: ${{ !env.ACT }}
+        if: ${{ !env.ACT }}
         with:
           password: ${{ inputs.pypi_api_token }}
           packages-dir: ${{ inputs.package_dir }}

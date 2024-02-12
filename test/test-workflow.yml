@@ -4,7 +4,7 @@ on:
   release:
 
 jobs:
-  test_package:
+  test_action:
     name: Test Package
     runs-on: ubuntu-latest
     strategy:
@@ -14,12 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Create Package
+      - name: Test all sub-actions with test package located at ./test-package
         uses: ./
         with:
-          working_directory: ./test
+          working_directory: test/dummy-package
           tag: "0.1.0"
           python_version: ${{ matrix.python-version }}
           test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
           pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
-          package_dir: ./test/dist/
+          package_dir: ./test/dummy-package/dist/
