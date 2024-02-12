@@ -33,6 +33,7 @@ runs:
     steps:
       - name: Publish distribution package to PyPI (test)
         uses: pypa/gh-action-pypi-publish@release/v1
+        if: ${{ !env.ACT }}
         with:
           password: ${{ inputs.test_pypi_api_token }}
           repository-url: https://test.pypi.org/legacy/
