@@ -38,7 +38,6 @@ runs:
       uses: ./build-python-package
       with:
         working_directory: ${{ inputs.working_directory }}
-        python_version: ${{ inputs.python_version }}
 
     - name: Test package
       uses: ./test-package
