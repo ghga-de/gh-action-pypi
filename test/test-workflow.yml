@@ -1,25 +1,66 @@
-name: PyPI Publish Workflow
+name: Test PyPI Publish Workflow
 
 on:
   release:
 
 jobs:
-  test_action:
-    name: Test Package
+
+  build_python_package:
+    name: Version Verified Package Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test the verify-version-tag action
+        uses: ./verify-version-tag
+        with:
+          working_directory: test/dummy-package
+          tag: "0.1.0"
+
+      - name: Test the build-python-package action
+        id: packaging
+        uses: ./build-python-package
+        with:
+          working_directory: test/dummy-package
+
+      - name: Upload production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist_folder
+          path: test/dummy-package/dist
+
+  test_package:
+    name: Test Python Package
+    needs: build_python_package
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Download dist content
+        uses: actions/download-artifact@v4
+        with:
+          name: dist_folder
 
-      - name: Test all sub-actions with test package located at ./test-package
-        uses: ./
+      - name: Test the test-package action
+        uses: ./test-package
         with:
           working_directory: test/dummy-package
-          tag: "0.1.0"
           python_version: ${{ matrix.python-version }}
-          test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
-          package_dir: ./test/dummy-package/dist/
+
+  # publish_package:
+  #   name: Test Publish Package
+  #   needs: test_package
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - name: Test the publish-package action
+  #       uses: ./publish_package
+  #       with:
+  #         test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
+  #         pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
+  #         package_dir: ./test/dummy-package/dist/
