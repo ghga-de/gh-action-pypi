@@ -22,6 +22,9 @@ inputs:
     default: "."
   python_version:
     description: "Python version used to test package."
+  python_dist_folder_name:
+    description: "Name of the folder in which package distribution files reside."
+    default: "./dist"
 
 runs:
     using: composite
@@ -38,7 +41,7 @@ runs:
         shell: bash
         working-directory: ${{ inputs.working_directory }}
         run: |
-          TAR_PATH="$( realpath ./dist/*.tar.gz)"
+          TAR_PATH="$( realpath ./${{ python_dist_folder_name }}/*.tar.gz)"
           python -m \
             pip install \
             "${TAR_PATH}[all]"

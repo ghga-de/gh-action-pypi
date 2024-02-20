@@ -44,13 +44,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dist_folder
-          path: ./dist
 
       - name: Test the test-package action
         uses: ./test-package
         with:
           working_directory: ./test/dummy-package
           python_version: ${{ matrix.python-version }}
+          python_dist_folder_name: dist_folder
 
   # publish_package:
   #   name: Test Publish Package
