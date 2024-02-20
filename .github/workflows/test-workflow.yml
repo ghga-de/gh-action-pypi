@@ -58,13 +58,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: where am i
-        shell: bash
-        run: ls -R .
+      - name: Download dist content
+        uses: actions/download-artifact@v4
 
       - name: Test the publish-package action
         uses: ./publish-package
         with:
           test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
           pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
-          # package_dir: ./test/dummy-package/dist/
