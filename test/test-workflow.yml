@@ -1,7 +1,6 @@
 name: Test PyPI Publish Workflow
 
-on:
-  release:
+on: push
 
 jobs:
 
