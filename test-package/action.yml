@@ -22,6 +22,7 @@ inputs:
     default: "."
   python_version:
     description: "Python version used to test package."
+  
 
 
 runs:
@@ -34,6 +35,9 @@ runs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ inputs.python_version }}
+        
+      - name: where am i
+        run: ls -R .
 
       - name: Install the newly build package with all extras
         shell: bash
