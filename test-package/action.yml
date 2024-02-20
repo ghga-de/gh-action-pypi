@@ -41,7 +41,7 @@ runs:
         shell: bash
         working-directory: ${{ inputs.working_directory }}
         run: |
-          TAR_PATH="$( realpath ./${{ python_dist_folder_name }}/*.tar.gz)"
+          TAR_PATH="$( realpath ./${{ inputs.python_dist_folder_name }}/*.tar.gz)"
           python -m \
             pip install \
             "${TAR_PATH}[all]"
