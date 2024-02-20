@@ -25,7 +25,7 @@ inputs:
     required: true
   package_dir: 
     description: "Custom target package dists directory"
-    default: "dist/"
+    default: "./artifact"
   
 
 runs:
