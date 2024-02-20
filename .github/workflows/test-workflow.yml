@@ -45,6 +45,9 @@ jobs:
         with:
           name: dist_folder
 
+      - name: Display the location
+        run: pwd
+
       - name: Test the test-package action
         uses: ./test-package
         with:
