@@ -45,8 +45,8 @@ jobs:
         with:
           name: dist_folder
 
-      - name: Display the location
-        run: pwd
+      - name: Display the artifacts
+        run: ls -R .
 
       - name: Test the test-package action
         uses: ./test-package
