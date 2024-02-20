@@ -37,7 +37,7 @@ runs:
         
       - name: where am i
         shell: bash
-        run: ls -R .
+        run: ls -R $( realpath .)
 
       - name: Install the newly build package with all extras
         shell: bash
