@@ -1,4 +1,4 @@
 [project]
-name= "testing-publish-ghga-gh-action"
+name= "testing-ghga-pypi-wf"
 version = "0.2.0"
 readme = "README.md"
