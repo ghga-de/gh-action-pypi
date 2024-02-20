@@ -1,6 +1,8 @@
 name: Test PyPI Publish Workflow
 
-on: push
+on:
+  release:
+    types: [published]
 
 jobs:
 
@@ -15,7 +17,7 @@ jobs:
         uses: ./verify-version-tag
         with:
           working_directory: ./test/dummy-package
-          tag: "0.1.0"
+          tag: "0.2.0"
 
       - name: Test the build-python-package action
         id: packaging
@@ -42,26 +44,23 @@ jobs:
       - name: Download dist content
         uses: actions/download-artifact@v4
 
-      - name: Display the artifacts
-        run: ls -R .
-
       - name: Test the test-package action
         uses: ./test-package
         with:
           working_directory: ./test/dummy-package
           python_version: ${{ matrix.python-version }}
 
-  # publish_package:
-  #   name: Test Publish Package
-  #   needs: test_package
-  #   runs-on: ubuntu-latest
+  publish_package:
+    name: Test Publish Package
+    needs: test_package
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-  #     - name: Test the publish-package action
-  #       uses: ./publish_package
-  #       with:
-  #         test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
-  #         pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
-  #         package_dir: ./test/dummy-package/dist/
+      - name: Test the publish-package action
+        uses: ./publish_package
+        with:
+          test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
+          package_dir: ./test/dummy-package/dist/
