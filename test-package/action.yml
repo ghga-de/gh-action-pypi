@@ -37,6 +37,7 @@ runs:
           python-version: ${{ inputs.python_version }}
         
       - name: where am i
+        shell: bash
         run: ls -R .
 
       - name: Install the newly build package with all extras
