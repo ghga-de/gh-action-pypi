@@ -21,7 +21,7 @@ inputs:
     description: "Token required to publish the package to test pypi"
     required: true
   pypi_api_token:
-    description: "Token required to publish the package to test pypi"
+    description: "Token required to publish the package to pypi"
     required: true
   package_dir: 
     description: "Custom target package dists directory"
