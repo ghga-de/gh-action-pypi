@@ -1,6 +1,6 @@
 ## Test the action locally
 
-Register an account for [test pypi](https://test.pypi.org/) and create API token.
+Register an account for [test pypi](https://test.pypi.org/) and create an API token.
 
 ```bash
 act release -W .github/workflows/test-workflow.yml -s <test-pypi-token>
