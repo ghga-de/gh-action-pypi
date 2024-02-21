@@ -14,7 +14,7 @@
 # limitations under the License.
 
 name: Verify Python Package Tag
-description: Tasks that are executed in GHGA to verify Python package tag
+description: Tasks that are executed to verify Python package tag
 
 inputs:
   tag:
