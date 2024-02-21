@@ -1,2 +1,2 @@
 # Mock readme
-For testing github actions locally using act.
+For testing actions either locally or on GitHub.
