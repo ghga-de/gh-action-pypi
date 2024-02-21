@@ -14,7 +14,7 @@
 # limitations under the License.
 
 name: Test Python Package
-description: Tasks that are executed in GHGA to test a newly built Python package
+description: Tasks that are executed to test a newly built Python package
 
 inputs:
   working_directory:
