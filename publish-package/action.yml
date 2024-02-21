@@ -24,9 +24,11 @@ inputs:
     description: "Token required to publish the package to pypi"
     required: true
   package_dir: 
-    description: "Custom target package dists directory"
+    description: "Directory where the package distributions are stored."
     default: "./artifact"
-  
+  debug_mode:
+    description: "Parameter to skip publishing the package to official PyPI when set to 'true'"
+    default: "false"
 
 runs:
     using: composite
@@ -34,7 +36,6 @@ runs:
     steps:
       - name: Publish distribution package to PyPI (test)
         uses: pypa/gh-action-pypi-publish@release/v1
-        # if: ${{ !env.ACT }}
         with:
           password: ${{ inputs.test_pypi_api_token }}
           repository-url: https://test.pypi.org/legacy/
@@ -42,7 +43,7 @@ runs:
 
       - name: Publish distribution package to PyPI (production)
         uses: pypa/gh-action-pypi-publish@release/v1
-        # if: ${{ !env.ACT }}
+        if: ${{ !env.ACT || inputs.debug_mode == "false" }}
         with:
           password: ${{ inputs.pypi_api_token }}
           packages-dir: ${{ inputs.package_dir }}

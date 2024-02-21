@@ -64,5 +64,6 @@ jobs:
       - name: Test the publish-package action
         uses: ./publish-package
         with:
+          debug_mode: "true"
           test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
           pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
