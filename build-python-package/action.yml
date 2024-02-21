@@ -14,7 +14,7 @@
 # limitations under the License.
 
 name: Build Python Package
-description: Tasks that are executed in GHGA to build a Python package
+description: Tasks that are executed to build a Python package
 
 inputs:
   working_directory:
