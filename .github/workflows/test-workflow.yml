@@ -25,7 +25,7 @@ jobs:
         with:
           working_directory: ./test/dummy-package
 
-      - name: Upload production artifacts
+      - name: Upload package artifact
         uses: actions/upload-artifact@v4
         with:
           path: ./test/dummy-package/dist
