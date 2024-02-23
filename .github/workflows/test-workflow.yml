@@ -1,9 +1,6 @@
 name: Test PyPI Publish Workflow
 
-on:
-  workflow_dispatch:
-  release:
-    types: [published]
+on: workflow_dispatch
 
 jobs:
 
