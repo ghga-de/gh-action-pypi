@@ -1,9 +1,6 @@
 name: Test PyPI Publish Workflow
 
-on:
-  workflow_dispatch:
-  release:
-    types: [published]
+on: workflow_dispatch
 
 jobs:
 
@@ -18,7 +15,7 @@ jobs:
         uses: ./verify-version-tag
         with:
           working_directory: ./test/dummy-package
-          tag: "0.3.0"
+          tag: "0.4.0"
 
       - name: Test the build-python-package action
         id: packaging
