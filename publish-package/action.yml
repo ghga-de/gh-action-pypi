@@ -43,7 +43,7 @@ runs:
 
       - name: Publish distribution package to PyPI (production)
         uses: pypa/gh-action-pypi-publish@release/v1
-        if: ${{ !env.ACT || inputs.debug_mode == "false" }}
+        if: inputs.debug_mode == 'false'
         with:
           password: ${{ inputs.pypi_api_token }}
           packages-dir: ${{ inputs.package_dir }}
