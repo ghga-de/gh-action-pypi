@@ -27,7 +27,7 @@ inputs:
     description: "Directory where the package distributions are stored."
     default: "./artifact"
   test_pypi:
-    description: "Parameter to skip publishing the package to official PyPI when set to 'true'"
+    description: "Parameter to publish the package to Test PyPI when set to 'true', and to publish to official Pypi when set to 'false'."
     default: "false"
 
 runs:
