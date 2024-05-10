@@ -26,8 +26,8 @@ inputs:
   package_dir: 
     description: "Directory where the package distributions are stored."
     default: "./artifact"
-  debug_mode:
-    description: "Parameter to skip publishing the package to official PyPI when set to 'true'"
+  test_pypi:
+    description: "Parameter to publish the package to Test PyPI when set to 'true', and to publish to official Pypi when set to 'false'."
     default: "false"
 
 runs:
@@ -37,13 +37,14 @@ runs:
       - name: Publish distribution package to PyPI (test)
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
+          if: inputs.test_pypi == 'true'
           password: ${{ inputs.test_pypi_api_token }}
           repository-url: https://test.pypi.org/legacy/
           packages-dir: ${{ inputs.package_dir }}
 
       - name: Publish distribution package to PyPI (production)
         uses: pypa/gh-action-pypi-publish@release/v1
-        if: inputs.debug_mode == 'false'
+        if: inputs.test_pypi == 'false'
         with:
           password: ${{ inputs.pypi_api_token }}
           packages-dir: ${{ inputs.package_dir }}
