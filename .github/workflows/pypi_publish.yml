@@ -6,8 +6,8 @@ on:
       package_version:
         description: "The version used to publish to the registry."
         required: true
-    #   test_pypi: "Parameter to publish the package to Test PyPI when set to 'true', and to publish to official Pypi when set to 'false'."
-    #     required: true
+      test_pypi: "Parameter to publish the package to Test PyPI when set to 'true', and to publish to official Pypi when set to 'false'."
+        required: true
 
 jobs:
 
@@ -61,9 +61,9 @@ jobs:
       - name: Download dist content
         uses: actions/download-artifact@v4
 
-      # - name: Test the publish-package action
-      #   uses: ghga-de/gh-action-pypi/publish-package@v1.0.2
-      #   with:
-      #     test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
-      #     pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
-      #     test_pypi: ${{ inputs.test_pypi }}
+      - name: Test the publish-package action
+        uses: ghga-de/gh-action-pypi/publish-package@v1.0.2
+        with:
+          test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
+          test_pypi: ${{ inputs.test_pypi }}
