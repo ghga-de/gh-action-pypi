@@ -61,9 +61,9 @@ jobs:
       - name: Download dist content
         uses: actions/download-artifact@v4
 
-      - name: Test the publish-package action
-        uses: ghga-de/gh-action-pypi/publish-package@v1.0.2
-        with:
-          test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
-          test_pypi: ${{ inputs.test_pypi }}
+      # - name: Test the publish-package action
+      #   uses: ghga-de/gh-action-pypi/publish-package@v1.0.2
+      #   with:
+      #     test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
+      #     pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
+      #     test_pypi: ${{ inputs.test_pypi }}
