@@ -5,6 +5,7 @@ on:
     inputs:
       package_version:
         description: "The version used to publish to the registry."
+        type: string
         required: true
       # test_pypi:
       #   description: "Parameter to publish the package to Test PyPI when set to 'true', and to publish to official Pypi when set to 'false'."
