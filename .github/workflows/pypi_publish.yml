@@ -2,13 +2,6 @@ name: PyPI publish
 
 on:
   workflow_call:
-    secrets:
-        TEST_PYPI_API_TOKEN:
-          description: "Token required to publish the package to test pypi"
-          required: true
-        PYPI_API_TOKEN:
-          description: "Token required to publish the package to pypi"
-          required: true
 
 jobs:
 
