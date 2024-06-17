@@ -2,6 +2,10 @@ name: PyPI publish
 
 on:
   workflow_call:
+    inputs:
+      package_version:
+        description: "The version used to publish to the registry."
+        required: true
 
 jobs:
 
@@ -15,7 +19,7 @@ jobs:
       - name: Validate Version Tag
         uses: ghga-de/gh-action-pypi/verify-version-tag@v1.0.1
         with:
-          tag: "1.2.1"
+          tag: ${{ inputs.package_version }}
 
       - name: Build Python Package
         uses: ghga-de/gh-action-pypi/build-python-package@v1.0.1
