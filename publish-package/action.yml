@@ -28,7 +28,7 @@ inputs:
     default: "./artifact"
   test_pypi:
     description: "Parameter to publish the package to Test PyPI when set to 'true', and to publish to official Pypi when set to 'false'."
-    default: "false"
+    required: true
 
 runs:
     using: composite
