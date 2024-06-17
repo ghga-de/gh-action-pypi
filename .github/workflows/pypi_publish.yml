@@ -3,9 +3,9 @@ name: PyPI publish
 on:
   workflow_call:
     inputs:
-      package_version:
-        description: "The version used to publish to the registry."
-        required: true
+      # package_version:
+      #   description: "The version used to publish to the registry."
+      #   required: true
       test_pypi: "Parameter to publish the package to Test PyPI when set to 'true', and to publish to official Pypi when set to 'false'."
         required: true
 
@@ -18,10 +18,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate Version Tag
-        uses: ghga-de/gh-action-pypi/verify-version-tag@v1.0.2
-        with:
-          tag: ${{ inputs.package_version }}
+      # - name: Validate Version Tag
+      #   uses: ghga-de/gh-action-pypi/verify-version-tag@v1.0.2
+      #   with:
+      #     tag: ${{ inputs.package_version }}
 
       - name: Build Python Package
         uses: ghga-de/gh-action-pypi/build-python-package@v1.0.2
@@ -61,9 +61,9 @@ jobs:
       - name: Download dist content
         uses: actions/download-artifact@v4
 
-      # - name: Test the publish-package action
-      #   uses: ghga-de/gh-action-pypi/publish-package@v1.0.2
-      #   with:
-      #     test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
-      #     pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
-      #     test_pypi: ${{ inputs.test_pypi }}
+      - name: Test the publish-package action
+        uses: ghga-de/gh-action-pypi/publish-package@v1.0.2
+        with:
+          test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
+          test_pypi: ${{ inputs.test_pypi }}
