@@ -26,10 +26,10 @@ jobs:
       - name: Build Python Package
         uses: ghga-de/gh-action-pypi/build-python-package@v1.0.2
 
-      # - name: Upload package artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     path: ./dist
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: ./dist
 
   test-package:
     name: Test Freshly Built Package
