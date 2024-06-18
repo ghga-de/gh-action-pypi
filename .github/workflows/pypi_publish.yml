@@ -9,6 +9,7 @@ on:
         required: true
       test_pypi:
         description: "Parameter to publish the package to Test PyPI when set to 'true', and to publish to official Pypi when set to 'false'."
+        type: string
         required: true
 
 jobs:
