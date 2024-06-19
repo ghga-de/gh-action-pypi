@@ -46,8 +46,8 @@ jobs:
       versions: $
     steps:
       - name: Define python versions
+        shell: bash
         run: |
-        echo ${{ inputs.python_latest }} >&2
         PYTHON_LATEST=${{ inputs.python_latest }}
         if $PYTHON_LATEST; then 
           echo '["3.12"]' >> "$GITHUB_OUTPUT"
