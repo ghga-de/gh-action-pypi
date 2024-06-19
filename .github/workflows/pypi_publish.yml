@@ -53,7 +53,7 @@ jobs:
           else
             echo 'versions=["3.9", "3.10", "3.11", "3.12"]' >> "$GITHUB_OUTPUT"
           fi
-          echo "$GITHUB_OUTPUT"  >&2
+      
 
   test-package:
     name: Test Freshly Built Package
@@ -70,6 +70,10 @@ jobs:
 
       - name: Download dist content
         uses: actions/download-artifact@v4
+      
+      - name: Report version
+        run: |
+          cat python-version
 
       - name: Test using the test-package action
         uses: ghga-de/gh-action-pypi/test-package@main
