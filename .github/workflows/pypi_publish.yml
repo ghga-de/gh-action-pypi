@@ -54,6 +54,7 @@ jobs:
           else
             echo 'versions=["3.9", "3.10", "3.11", "3.12"]' >> "$GITHUB_OUTPUT"
           fi
+          echo "$GITHUB_OUTPUT"  >&2
 
   test-package:
     name: Test Freshly Built Package
