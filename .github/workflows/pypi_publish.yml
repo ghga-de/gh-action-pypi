@@ -11,6 +11,11 @@ on:
         description: "Parameter to publish the package to Test PyPI when set to 'true', and to publish to official Pypi when set to 'false'."
         type: string
         required: true
+      python_latest:
+        description: 'Use the latest Python version (3.12)'
+        required: true
+        default: false
+        type: boolean
 
 jobs:
 
@@ -28,7 +33,7 @@ jobs:
           tag: ${{ inputs.package_version }}
 
       - name: Build Python Package
-        uses: ghga-de/gh-action-pypi/build-python-package@v1.1.2
+        uses: ghga-de/gh-action-pypi/build-python-package@main
 
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
@@ -41,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11", "3.12"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     steps:
       - name: Checkout repository 
@@ -49,9 +54,16 @@ jobs:
 
       - name: Download dist content
         uses: actions/download-artifact@v4
+      
+      - name: Test with Python 3.12 using the test-package action
+        if: ${{ inputs.python_latest }}
+        uses: ghga-de/gh-action-pypi/test-package@main
+        with:
+          python_version: 3.12
 
-      - name: Test using the test-package action
-        uses: ghga-de/gh-action-pypi/test-package@v1.1.2
+      - name: Test with Python 3.9-3.12 using the test-package action
+        if: ${{ !inputs.python_latest }}
+        uses: ghga-de/gh-action-pypi/test-package@main
         with:
           python_version: ${{ matrix.python-version }}
 
@@ -68,7 +80,7 @@ jobs:
         uses: actions/download-artifact@v4
 
       - name: Publish using the publish-package action
-        uses: ghga-de/gh-action-pypi/publish-package@v1.1.2
+        uses: ghga-de/gh-action-pypi/publish-package@main
         with:
           test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
           pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
