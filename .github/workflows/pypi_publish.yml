@@ -48,12 +48,12 @@ jobs:
       - name: Define python versions
         shell: bash
         run: |
-        PYTHON_LATEST=${{ inputs.python_latest }}
-        if $PYTHON_LATEST; then 
-          echo '["3.12"]' >> "$GITHUB_OUTPUT"
-        else
-          echo '["3.9", "3.10", "3.11", "3.12"]' >> "$GITHUB_OUTPUT"
-        fi
+          PYTHON_LATEST=${{ inputs.python_latest }}
+          if $PYTHON_LATEST; then 
+            echo '["3.12"]' >> "$GITHUB_OUTPUT"
+          else
+            echo '["3.9", "3.10", "3.11", "3.12"]' >> "$GITHUB_OUTPUT"
+          fi
 
   test-package:
     name: Test Freshly Built Package
