@@ -43,15 +43,16 @@ jobs:
   define-matrix:
     runs-on: ubuntu-latest
     outputs:
-      versions: $
+      versions: ${{ steps.version.outputs.python }}
     steps:
       - name: Define python versions
+        id: version
         run: |
           PYTHON_LATEST=${{ inputs.python_latest }}
           if $PYTHON_LATEST; then 
-            echo "versions=["3.12"]" >> "$GITHUB_OUTPUT"
+            echo 'python=["3.12"]' >> "$GITHUB_OUTPUT"
           else
-            echo 'versions=["3.9", "3.10", "3.11", "3.12"]' >> "$GITHUB_OUTPUT"
+            echo 'python=["3.9", "3.10", "3.11", "3.12"]' >> "$GITHUB_OUTPUT"
           fi
       
 
@@ -70,10 +71,6 @@ jobs:
 
       - name: Download dist content
         uses: actions/download-artifact@v4
-      
-      - name: Report version
-        run: |
-          cat python-version
 
       - name: Test using the test-package action
         uses: ghga-de/gh-action-pypi/test-package@main
