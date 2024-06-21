@@ -1,4 +1,4 @@
-# Copyright 2022-2023 Universität Tübingen, DKFZ and EMBL
+# Copyright 2022-2024 Universität Tübingen, DKFZ and EMBL
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,9 +28,9 @@ runs:
       - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
       - name: Install pypa/build
         shell: bash

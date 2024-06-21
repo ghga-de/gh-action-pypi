@@ -1,10 +1,10 @@
 name: Test PyPI Publish Workflow
 
-on: workflow_dispatch
+on: release
 
 jobs:
 
-  build_python_package:
+  build-python-package:
     name: Version Verified Package Build
     runs-on: ubuntu-latest
 
@@ -28,13 +28,34 @@ jobs:
         with:
           path: ./test/dummy-package/dist
 
-  test_package:
+
+  define-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ steps.version.outputs.python }}
+    steps:
+      - name: Define python versions
+        id: version
+        with:
+          python_latest: false
+        run: |
+          PYTHON_LATEST=${{ inputs.python_latest }}
+          if $PYTHON_LATEST; then 
+            echo 'python=["3.12"]' >> "$GITHUB_OUTPUT"
+          else
+            echo 'python=["3.9", "3.10", "3.11", "3.12"]' >> "$GITHUB_OUTPUT"
+          fi
+
+
+  test-package:
     name: Test Python Package
-    needs: build_python_package
+    needs:
+    - build-python-package
+    - define-matrix
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        python-version: ${{ fromJSON(needs.define-matrix.outputs.versions) }}
 
     steps:
       - uses: actions/checkout@v4
@@ -48,9 +69,9 @@ jobs:
           working_directory: ./test/dummy-package
           python_version: ${{ matrix.python-version }}
 
-  publish_package:
+  publish-package:
     name: Test Publish Package
-    needs: test_package
+    needs: test-package
     runs-on: ubuntu-latest
 
     steps:

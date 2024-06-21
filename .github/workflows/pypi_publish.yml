@@ -1,0 +1,97 @@
+name: PyPI publish
+
+on:
+  workflow_call:
+    inputs:
+      package_version:
+        description: "The version used to publish to the registry."
+        type: string
+        required: true
+      test_pypi:
+        description: "Parameter to publish the package to Test PyPI when set to 'true', and to publish to official Pypi when set to 'false'."
+        type: string
+        required: true
+      python_latest:
+        description: 'Use the latest Python version (3.12)'
+        required: true
+        default: false
+        type: boolean
+
+jobs:
+
+  build-package:
+    name: Build Package with Verified Version
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository 
+        uses: actions/checkout@v4
+
+      - name: Validate Version Tag
+        uses: ghga-de/gh-action-pypi/verify-version-tag@main
+        with:
+          tag: ${{ inputs.package_version }}
+
+      - name: Build Python Package
+        uses: ghga-de/gh-action-pypi/build-python-package@main
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: ./dist
+
+  define-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ steps.version.outputs.python }}
+    steps:
+      - name: Define python versions
+        id: version
+        run: |
+          PYTHON_LATEST=${{ inputs.python_latest }}
+          if $PYTHON_LATEST; then 
+            echo 'python=["3.12"]' >> "$GITHUB_OUTPUT"
+          else
+            echo 'python=["3.9", "3.10", "3.11", "3.12"]' >> "$GITHUB_OUTPUT"
+          fi
+      
+
+  test-package:
+    name: Test Freshly Built Package
+    needs:
+    - build-package
+    - define-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ${{ fromJSON(needs.define-matrix.outputs.versions) }}
+    steps:
+      - name: Checkout repository 
+        uses: actions/checkout@v4
+
+      - name: Download dist content
+        uses: actions/download-artifact@v4
+
+      - name: Test using the test-package action
+        uses: ghga-de/gh-action-pypi/test-package@main
+        with:
+          python_version: ${{ matrix.python-version }}
+
+  publish-package:
+    name: Publish Package
+    needs: test-package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository 
+        uses: actions/checkout@v4
+
+      - name: Download dist content
+        uses: actions/download-artifact@v4
+
+      - name: Publish using the publish-package action
+        uses: ghga-de/gh-action-pypi/publish-package@main
+        with:
+          test_pypi_api_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          pypi_api_token: ${{ secrets.PYPI_API_TOKEN }}
+          test_pypi: ${{ inputs.test_pypi }}
