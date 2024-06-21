@@ -73,7 +73,7 @@ jobs:
         uses: actions/download-artifact@v4
 
       - name: Test using the test-package action
-        uses: ghga-de/gh-action-pypi/test-package@reusable_publish_workflow
+        uses: ghga-de/gh-action-pypi/test-package@main
         with:
           python_version: ${{ matrix.python-version }}
 
