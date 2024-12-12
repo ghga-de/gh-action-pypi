@@ -35,7 +35,7 @@ runs:
 
     steps:
       - name: Publish distribution package to PyPI (test)
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@v1.8.8
         if: inputs.test_pypi == 'true'
         with:
           password: ${{ inputs.test_pypi_api_token }}
@@ -43,7 +43,7 @@ runs:
           packages-dir: ${{ inputs.package_dir }}
 
       - name: Publish distribution package to PyPI (production)
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@v1.8.8
         if: inputs.test_pypi == 'false'
         with:
           password: ${{ inputs.pypi_api_token }}
